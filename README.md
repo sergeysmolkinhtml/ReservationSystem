@@ -11,3 +11,5 @@ Code should be clean, commented, DRY,... etc etc
 Well built logic, readable, and project structure. We'll get a basic version up and running, then add functionalities along the way, such as online payment integration etc... layout should be responsive and optimised for mobile.
 
 Thanks for reading!
+
+
