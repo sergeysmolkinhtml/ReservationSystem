@@ -14,9 +14,9 @@ class CompanyUserTest extends TestCase
     public function test_admin_can_access_company_users_page()
     {
         $company = Company::factory()->create();
-        $user = User::factory()->admin()->create();
+        $admin = User::factory()->admin()->create();
 
-        $response = $this->actingAs($user)->get(route('companies.users.index', $company->id));
+        $response = $this->actingAs($admin)->get(route('companies.users.index', $company->id));
 
         $response->assertOk();
     }
@@ -24,9 +24,9 @@ class CompanyUserTest extends TestCase
     public function test_admin_can_create_user_for_a_company()
     {
         $company = Company::factory()->create();
-        $user = User::factory()->admin()->create();
+        $admin = User::factory()->admin()->create();
 
-        $response = $this->actingAs($user)->post(route('companies.users.store', $company->id), [
+        $response = $this->actingAs($admin)->post(route('companies.users.store', $company->id), [
             'name' => 'test user',
             'email' => 'test@test.com',
             'password' => 'password',
@@ -43,9 +43,9 @@ class CompanyUserTest extends TestCase
     public function test_admin_can_edit_user_for_a_company()
     {
         $company = Company::factory()->create();
-        $user = User::factory()->admin()->create(['company_id' => $company->id]);
+        $admin = User::factory()->admin()->create(['company_id' => $company->id]);
 
-        $response = $this->actingAs($user)->put(route('companies.users.update', [$company->id, $user->id]), [
+        $response = $this->actingAs($admin)->put(route('companies.users.update', [$company->id, $admin->id]), [
             'name' => 'updated user',
             'email' => 'test@update.com',
         ]);
@@ -61,9 +61,9 @@ class CompanyUserTest extends TestCase
     public function test_admin_can_delete_user_for_a_company()
     {
         $company = Company::factory()->create();
-        $user = User::factory()->admin()->create(['company_id' => $company->id]);
+        $admin = User::factory()->admin()->create(['company_id' => $company->id]);
 
-        $response = $this->actingAs($user)->delete(route('companies.users.update', [$company->id, $user->id]));
+        $response = $this->actingAs($admin)->delete(route('companies.users.update', [$company->id, $admin->id]));
 
         $response->assertRedirect(route('companies.users.index', $company->id));
 
