@@ -42,6 +42,13 @@ class UserFactory extends Factory
         ]);
     }
 
+    public function guide(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => RolesEnum::GUIDE->value,
+        ]);
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      */

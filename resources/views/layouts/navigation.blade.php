@@ -28,6 +28,9 @@
                             {{ __('Administrators') }}
                         </x-nav-link>
                     @endif
+                    <x-nav-link :href="route('companies.guides.index', auth()->user()->company_id)" :active="request()->routeIs('companies.guides.*')">
+                        {{ __('Guides') }}
+                    </x-nav-link>
                 </div>
             </div>
 

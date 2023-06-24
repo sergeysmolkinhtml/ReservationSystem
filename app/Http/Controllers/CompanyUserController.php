@@ -28,9 +28,13 @@ class CompanyUserController extends Controller
     public function store(StoreUserRequest $request, Company $company)
     {
         $this->authorize('create', $company);
-        $company->users()->create($request->validated() +
-            ['role_id' => RolesEnum::COMPANY_OWNER->value]
-        );
+
+        $company->users()->create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+            'role_id' => RolesEnum::COMPANY_OWNER->value,
+        ]);
 
         return to_route('companies.users.index', $company);
     }
