@@ -35,6 +35,13 @@ class UserFactory extends Factory
         ]);
     }
 
+    public function companyOwner(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => RolesEnum::COMPANY_OWNER->value,
+        ]);
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      */

@@ -1,4 +1,5 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+    @php use App\Enums\RolesEnum; @endphp
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -15,9 +16,16 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @if(auth()->user()->role_id == \App\Enums\RolesEnum::ADMINISTRATOR->value)
+
+                    @if(auth()->user()->role_id == RolesEnum::ADMINISTRATOR->value)
                         <x-nav-link :href="route('companies.index')" :active="request()->routeIs('companies.index')">
                             {{ __('Companies') }}
+                        </x-nav-link>
+                    @endif
+
+                    @if(auth()->user()->role_id === RolesEnum::COMPANY_OWNER->value)
+                        <x-nav-link :href="route('companies.users.index', auth()->user()->company_id)" :active="request()->routeIs('companies.users.*')">
+                            {{ __('Administrators') }}
                         </x-nav-link>
                     @endif
                 </div>
