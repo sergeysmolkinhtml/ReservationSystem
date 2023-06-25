@@ -286,4 +286,5 @@ class CompanyActivityTest extends TestCase
             'price' => 999900,
         ]);
     }
+
 }
