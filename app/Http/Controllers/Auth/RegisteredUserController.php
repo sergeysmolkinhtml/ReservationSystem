@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Enums\RolesEnum;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserInvitation;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -19,9 +21,23 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(Request $request) : View
     {
-        return view('auth.register');
+        $email = null;
+
+        if ($request->has('invitation_token')) {
+            $token = $request->input('invitation_token');
+
+            session()->put('invitation_token', $token);
+
+            $invitation = UserInvitation::where('token', $token)
+                ->whereNull('registered_at')
+                ->firstOrFail();
+
+            $email = $invitation->email;
+        }
+
+        return view('auth.register', compact('email'));
     }
 
     /**
@@ -33,15 +49,28 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        if ($request->session()->get('invitation_token')) {
+            $invitation = UserInvitation::where('token', $request->session()->get('invitation_token'))
+                ->where('email', $request->email)
+                ->whereNull('registered_at')
+                ->firstOr(fn () => throw ValidationException::withMessages(['invitation' => 'Invitation link does not match the email']));
+
+            $role = $invitation->role_id;
+            $company = $invitation->company_id;
+
+            $invitation->update(['registered_at' => now()]);
+        }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => RolesEnum::CUSTOMER->value
+            'role_id' => $role ?? RolesEnum::CUSTOMER->value,
+            'company_id' => $company ?? null,
         ]);
 
 

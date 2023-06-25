@@ -17,23 +17,25 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    @if(auth()->user()->role_id == RolesEnum::ADMINISTRATOR->value)
-                        <x-nav-link :href="route('companies.index')" :active="request()->routeIs('companies.index')">
-                            {{ __('Companies') }}
-                        </x-nav-link>
-                    @endif
+                    @auth
+                        @if(auth()->user()->role_id === RolesEnum::ADMINISTRATOR->value)
+                            <x-nav-link :href="route('companies.index')" :active="request()->routeIs('companies.index')">
+                                {{ __('Companies') }}
+                            </x-nav-link>
+                        @endif
 
-                    @if(auth()->user()->role_id === RolesEnum::COMPANY_OWNER->value)
-                        <x-nav-link :href="route('companies.users.index', auth()->user()->company_id)" :active="request()->routeIs('companies.users.*')">
-                            {{ __('Administrators') }}
-                        </x-nav-link>
-                    @endif
-                    <x-nav-link :href="route('companies.guides.index', auth()->user()->company_id)" :active="request()->routeIs('companies.guides.*')">
-                        {{ __('Guides') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('companies.activities.index', auth()->user()->company_id)" :active="request()->routeIs('companies.activities.*')">
-                        {{ __('Activities') }}
-                    </x-nav-link>
+                        @if(auth()->user()->role_id === RolesEnum::COMPANY_OWNER->value)
+                            <x-nav-link :href="route('companies.users.index', auth()->user()->company_id)" :active="request()->routeIs('companies.users.*')">
+                                {{ __('Administrators') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('companies.guides.index', auth()->user()->company_id)" :active="request()->routeIs('companies.guides.*')">
+                                {{ __('Guides') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('companies.activities.index', auth()->user()->company_id)" :active="request()->routeIs('companies.activities.*')">
+                                {{ __('Activities') }}
+                            </x-nav-link>
+                        @endif
+                    @endauth
                 </div>
             </div>
 
