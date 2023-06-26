@@ -59,7 +59,15 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
-
+                        @if(auth()->user()->role_id === RolesEnum::GUIDE->value)
+                            <x-dropdown-link :href="route('guide-activity.show')">
+                                {{ __('My Activities') }}
+                            </x-dropdown-link>
+                        @else
+                        <x-dropdown-link :href="route('my-activity.show')">
+                            {{ __('My Activities') }}
+                        </x-dropdown-link>
+                        @endif
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

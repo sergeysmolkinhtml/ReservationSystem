@@ -12,8 +12,7 @@
                     <form action="{{ route('companies.guides.store', $company) }}" method="POST">
                         @csrf
 
-
-                        <div class="mt-4">
+                        <div>
                             <x-input-label for="email" value="Email" />
                             <x-text-input id="email" name="email" value="{{ old('email') }}" type="text" class="block mt-1 w-full" />
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -21,7 +20,7 @@
 
                         <div class="mt-4">
                             <x-primary-button>
-                                Send Invitation
+                                Save
                             </x-primary-button>
                         </div>
                     </form>
