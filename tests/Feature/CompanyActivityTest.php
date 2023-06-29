@@ -287,4 +287,5 @@ class CompanyActivityTest extends TestCase
         ]);
     }
 
+
 }

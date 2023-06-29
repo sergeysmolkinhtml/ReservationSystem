@@ -79,12 +79,14 @@ class RegisteredUserController extends Controller
             'company_id' => $company ?? null,
         ]);
 
+        
 
         event(new Registered($user));
 
         Auth::login($user);
 
         $activity = Activity::find($request->session()->get('activity'));
+
         if ($request->session()->get('activity') && $activity) {
             $user->activities()->attach($request->session()->get('activity'));
 

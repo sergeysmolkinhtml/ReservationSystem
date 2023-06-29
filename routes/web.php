@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)->name('home');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('companies', CompanyController::class)->middleware('isAdmin');
-    Route::resource('companies.users', CompanyUserController::class)->except('show');
-    Route::resource('companies.guides', CompanyGuideController::class)->except('show');
-    Route::resource('companies.activities', CompanyActivityController::class);
+    Route::resource('/companies', CompanyController::class)->middleware('isAdmin');
+    Route::resource('/companies.users', CompanyUserController::class)->except('show');
+    Route::resource('/companies.guides', CompanyGuideController::class)->except('show');
+    Route::resource('/companies.activities', CompanyActivityController::class);
 
     Route::get('/guides/activities', [GuideActivityController::class, 'show'])->name('guide-activity.show');
     Route::get('/guides/activities/{activity}/pdf', [GuideActivityController::class, 'export'])->name('guide-activity.export');

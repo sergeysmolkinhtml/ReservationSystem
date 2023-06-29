@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Http\Requests\StoreGuideRequest;
 use App\Http\Requests\UpdateGuideRequest;
 use App\Models\UserInvitation;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -17,7 +18,7 @@ class CompanyGuideController extends Controller
     public function index(Company $company)
     {
         $this->authorize('viewAny', $company);
-
+                                                                    #TODO OWNER
         $guides = $company->users()->where('role_id', RolesEnum::GUIDE->value)->get();
 
         return view('companies.guides.index', compact('company', 'guides'));
@@ -30,7 +31,7 @@ class CompanyGuideController extends Controller
         return view('companies.guides.create', compact('company'));
     }
 
-    public function store(StoreGuideRequest $request, Company $company)
+    public function store(StoreGuideRequest $request, Company $company) : RedirectResponse
     {
         $this->authorize('create', $company);
 

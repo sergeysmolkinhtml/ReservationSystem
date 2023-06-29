@@ -16,6 +16,7 @@ class CompanyActivityController extends Controller
     public function index(Company $company)
     {
         $this->authorize('viewAny', $company);
+
         $company->load('activities');
 
         return view('companies.activities.index', compact('company'));
@@ -24,6 +25,7 @@ class CompanyActivityController extends Controller
     public function create(Company $company)
     {
         $this->authorize('create', $company);
+
         $guides = User::where('company_id', $company->id)
             ->where('role_id', RolesEnum::GUIDE->value)
             ->pluck('name', 'id');
@@ -61,6 +63,7 @@ class CompanyActivityController extends Controller
     public function update(UpdateActivityRequest $request, Company $company, Activity $activity)
     {
         $this->authorize('update', $company);
+
         $filename = $this->uploadImage($request);
 
         $activity->update($request->validated() + [
@@ -91,6 +94,7 @@ class CompanyActivityController extends Controller
     public function destroy(Company $company, Activity $activity)
     {
         $this->authorize('delete', $company);
+
         $activity->delete();
 
         return to_route('companies.activities.index', $company);
